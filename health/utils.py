@@ -1,13 +1,36 @@
 # -*- coding: utf-8 -*-
-import re, os, platform
+import re, os, platform, functools
 from pprint import pprint
 from random import sample
 from string import ascii_letters
 from unicodedata import normalize
 from collections import OrderedDict
+from urllib.parse import parse_qs
 
 import xlrd
 from bs4.element import Tag, NavigableString
+from listorm import Listorm, read_excel, read_csv
+
+
+def gen_search_query(querystrings):
+    ret = []
+    for qs in querystrings:
+        queryset = parse_qs(qs)
+        for key, values in queryset.items():
+            key = key.strip()
+            for val in values:
+                row = {}
+                val = val.strip()
+                if os.path.isfile(val):
+                    with open(val) as fp:
+                        for keyword in fp.readlines():
+                            row = {}
+                            row[key] = keyword.strip()
+                            ret.append(row)
+                else:
+                    row[key] = val
+                    ret.append(row)
+    return ret
 
 
 def get_edi_code_from_xl(xl_file):

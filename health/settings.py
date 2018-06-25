@@ -14,3 +14,5 @@ REQUEST_HEADER = {
 	"Accept-Encoding: gzip, deflate" ,
 	"Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7" ,	
 }
+
+

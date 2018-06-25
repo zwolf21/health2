@@ -22,9 +22,7 @@ def get_detail_api(drug_cd):
 	params = {
 		'drug_cd': drug_cd,
 		'callback': 'jQuery16209083411218851807_1529809120441',
-		# '_': 1529809120560,
 	}
-
 	r = requests.get(API_DETAIL_DRUG, params=params)
 	return r.content
 

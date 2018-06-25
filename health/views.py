@@ -55,11 +55,21 @@ def get_drug_detail(drug_code, ret_kpic=False):
 			return ret
 	return records
 
-
 def get_drug_list_by_edi(*edi_codes, **kwargs):
 	drug_list = Listorm()
 	for edi in edi_codes:
 		drug_list += get_drug_search_list(search_bohcode=edi)
+	drug_codes = drug_list.column_values('drug_cd')
+	detail_list = Listorm()
+	for drug_code in drug_codes:
+		detail_list += get_drug_detail(drug_code, **kwargs)
+	ret = detail_list.join(drug_list, left_on='drug_code', right_on='drug_cd')
+	return ret
+
+def get_drug_list(*criterias, **kwargs):
+	drug_list = Listorm()
+	for crit in criterias:
+		drug_list += get_drug_search_list(**crit)
 	drug_codes = drug_list.column_values('drug_cd')
 	detail_list = Listorm()
 	for drug_code in drug_codes:

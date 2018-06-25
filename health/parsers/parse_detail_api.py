@@ -31,10 +31,10 @@ def _parse_bohistory_price(value):
 	if not value:
 		return price
 
-	regx = re.compile(r'(?P<price>\d+)원')
+	regx = re.compile(r'(?P<price>\d+원)')
 	g = regx.search(value)
 	if g:
-		price = int(g.group('price'))
+		price = g.group('price')
 	return price
 
 def _parse_bohistory_bohgb(value):
