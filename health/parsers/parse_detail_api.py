@@ -39,6 +39,8 @@ def _parse_bohistory_price(value):
 
 def _parse_bohistory_bohgb(value):
 	bohgb = '비급여'
+	if not value:
+		return value
 
 	if '비급여' in value:
 		return bohgb

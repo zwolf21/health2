@@ -11,6 +11,7 @@ import xlrd
 from bs4.element import Tag, NavigableString
 from listorm import Listorm, read_excel, read_csv
 
+from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
 
 def gen_search_query(querystrings):
     ret = []
@@ -18,6 +19,9 @@ def gen_search_query(querystrings):
         queryset = parse_qs(qs)
         for key, values in queryset.items():
             key = key.strip()
+            if key not in DRUG_SEARCH_FORM or key not in DRUG_SEARCH_MORE_FORM:
+                print('"{}" is invalid query field name'.format(key))
+                return ret
             for val in values:
                 row = {}
                 val = val.strip()
