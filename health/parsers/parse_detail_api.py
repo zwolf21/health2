@@ -78,7 +78,21 @@ def _parse_drug_pic(value):
 			ret['sb_photo'] = src
 	return ret
 
+def _parce_atc_cd(value):
+	if not value:
+		return value
 
+	contents = value.split('|')
+	if contents:
+		return contents[0]
+	return value
+
+def _parse_effect(value):
+	if not value:
+		return value
+	value = value.replace('br', '\n')
+	value = re.sub('\n+', '\n', value)
+	return value
 
 def parse(content, *args, **kwargs):
 	regx = re.compile(b'jQuery[\w\_]+\((?P<content>.+)\)')
@@ -96,6 +110,8 @@ def parse(content, *args, **kwargs):
 	ret['upso_name'] = _parse_upso(ret.get('upso_name', ''))
 	ret['price'] = _parse_bohistory_price(ret.get('boh_history', ''))
 	ret['bohgb'] = _parse_bohistory_bohgb(ret.get('boh_history', ''))
+	ret['atc_cd'] = _parce_atc_cd(ret.get('atc_cd'))
+	ret['effect'] = _parse_effect(ret.get('effect'))
 	ret.update(_parse_drug_pic(ret.get('drug_pic')))
 	del ret['drug_pic']
 	del ret['picto_img']

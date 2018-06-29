@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>약품사진</title>
+    <meta charset="utf-8">
+<style type="text/css">
+.picture-title {
+    text-align: center;
+}
+</style>
+</head>
+<body>
+    <h1> 약품 사진 </h1>
+    <input type="button" id="inc" value="사진확대">
+    <input type="button" id="dsc" value="사진축소">
+    <input type="button" id="dflt" value="기본크기">
+<div class="container">
+    <table border="1">
+    {% for object_list in object_lists %}
+        <tr>
+            {% for object in object_list %}
+            <td>
+                <div class="picture-img">
+                    {% if object.sb_photo %}
+                        <img src="{{ object.sb_photo }}" width="200" height="100">
+                    {% else %}
+                        <img src="{{ object.pack_img }}" width="200" height="100">
+                    {% endif %}
+                </div>
+                <div class="picture-title">
+                    {{ object.drug_name }}
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+<script type="text/javascript">
+window.onload=function(){
+    var img_insts = document.getElementsByTagName('img');
+    var dh = img_insts[0].height 
+    var dw = img_insts[0].width
+    var inc = 0.1;
+    var scale = 0;
+    
+    document.getElementById('inc').onclick = function () {
+      if (1 + scale > 0) {
+          resizeImgs(img_insts,0.1);
+      }
+    }
+    document.getElementById('dsc').onclick = function () {
+        resizeImgs(img_insts,-0.1);
+    }
+    document.getElementById('dflt').onclick = function () {
+        for (var i = 0; i < img_insts.length; i++) {
+            img_insts[i].height = dh;
+            img_insts[i].width = dw;
+        }
+    }
+    function resizeImgs(imgs, ratio) {
+        for (var i = 0; i < imgs.length; i++) {
+            imgs[i].height += ratio*dh;
+            imgs[i].width += ratio*dw;
+        }
+    }
+}
+</script>
+</body>
+</html>

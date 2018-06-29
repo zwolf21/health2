@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from listorm import Listorm
 from tqdm import tqdm
 
-from settings import REQUEST_HEADER, MAX_WORKERS
+from settings import REQUEST_HEADER, MAX_WORKERS, JINJA_ENV
 from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
 from urls import SEARCH_DRUG, SEARCH_DRUG_MORE
 from parsers import parse_search_drug, parse_detail_api, parse_detail
@@ -71,15 +71,16 @@ def get_drug_list_by_edi(*edi_codes, **kwargs):
 
 def get_drug_list(*criterias, **kwargs):
 	drug_list = Listorm()
-	for crit in criterias:
+	for crit in tqdm(criterias, total=len(criterias)):
 		drug_list += get_drug_search_list(**crit)
 	drug_codes = drug_list.column_values('drug_cd')
 	detail_list = Listorm()
 	print('collecting {} items....'.format(len(drug_codes)))
-	for drug_code in drug_codes:
+	for drug_code in tqdm(drug_codes, total=len(drug_codes)):
 		detail_list += get_drug_detail(drug_code, **kwargs)
 	ret = detail_list.join(drug_list, left_on='drug_code', right_on='drug_cd')
-	return ret
+	records = [dict(row) for row in ret]
+	return records
 
 
 def get_drug_list_thread(*criterias, max_workers=MAX_WORKERS, **kwargs):
@@ -110,3 +111,19 @@ def get_drug_list_thread(*criterias, max_workers=MAX_WORKERS, **kwargs):
 			records += future.result()
 	records = [dict(row) for row in records]
 	return records
+
+
+def drug_picture_view(records, columns=5, env=JINJA_ENV, output_html=None):
+	records = Listorm(records)
+	records = records.distinct('drug_code')
+	template = env.get_template('drug_pictures.html')
+	object_lists = []
+	for i in range(0, len(records), columns):
+		object_lists.append(records[i:i+columns])
+
+	html = template.render(object_lists=object_lists)
+	if output_html:
+		with open(output_html, 'wt', encoding='utf-8') as fp:
+			fp.write(html)
+	else:
+		return html

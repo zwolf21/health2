@@ -13,6 +13,22 @@ from listorm import Listorm, read_excel, read_csv
 
 from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
 
+
+def get_edi_code_from_xl(xl_file):
+    edis = []
+    re_compile_edi = re.compile('[A-Z\d]\d{8}')
+    wb = xlrd.open_workbook(xl_file)
+    for sheet_index in range(wb.nsheets):
+        sheet = wb.sheet_by_index(sheet_index)
+        
+        for r in range(sheet.nrows):
+            for cell in sheet.row(r):
+                for edi in re_compile_edi.findall(str(cell.value)):
+                    edis.append(edi)
+    edis = list(OrderedDict.fromkeys(edis))
+    return [{'search_bohcode': edi} for edi in edis]
+
+
 def gen_search_query(querystrings):
     ret = []
     for qs in querystrings:
@@ -34,21 +50,8 @@ def gen_search_query(querystrings):
                 else:
                     row[key] = val
                     ret.append(row)
+
     return ret
-
-
-def get_edi_code_from_xl(xl_file):
-    edis = []
-    re_compile_edi = re.compile('[A-Z\d]\d{8}')
-    wb = xlrd.open_workbook(xl_file)
-    for sheet_index in range(wb.nsheets):
-        sheet = wb.sheet_by_index(sheet_index)
-        
-        for r in range(sheet.nrows):
-            for cell in sheet.row(r):
-                for edi in re_compile_edi.findall(str(cell.value)):
-                    edis.append(edi)
-    return list(OrderedDict.fromkeys(edis))
 
 
 def br_to_linebreak(td):
