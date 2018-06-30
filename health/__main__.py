@@ -1,10 +1,17 @@
 import argparse, os, platform, pprint
-
-from views import get_drug_search_list, get_drug_list, get_drug_list_thread, drug_picture_view
-from utils import gen_search_query, get_edi_code_from_xl
-from settings import MAX_WORKERS, COLUMN_MAP, INDEX
-from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
 import pandas as pd
+
+
+try:
+	from views import get_drug_search_list, get_drug_list, get_drug_list_thread, drug_picture_view
+	from utils import gen_search_query, get_edi_code_from_xl
+	from settings import MAX_WORKERS, COLUMN_MAP, INDEX
+	from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM	
+except:
+	from .views import get_drug_search_list, get_drug_list, get_drug_list_thread, drug_picture_view
+	from .utils import gen_search_query, get_edi_code_from_xl
+	from .settings import MAX_WORKERS, COLUMN_MAP, INDEX
+	from .forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM	
 
 
 def main():
@@ -30,6 +37,8 @@ def main():
 		querys = gen_search_query(args.query)
 	elif args.excel:
 		querys = get_edi_code_from_xl(args.excel)
+	else:
+		return
 
 	if args.workers == 1:
 		records = get_drug_list(*querys, ret_kpic=True)

@@ -11,7 +11,10 @@ import xlrd
 from bs4.element import Tag, NavigableString
 from listorm import Listorm, read_excel, read_csv
 
-from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+try:
+    from .forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+except:
+    from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
 
 
 def get_edi_code_from_xl(xl_file):

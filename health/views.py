@@ -1,5 +1,4 @@
 import os, sys, re
-from urllib.parse import quote
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
@@ -7,11 +6,18 @@ from bs4 import BeautifulSoup
 from listorm import Listorm
 from tqdm import tqdm
 
-from settings import REQUEST_HEADER, MAX_WORKERS, JINJA_ENV
-from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
-from urls import SEARCH_DRUG, SEARCH_DRUG_MORE
-from parsers import parse_search_drug, parse_detail_api, parse_detail
-from retrieves import retrieve_search_drug
+try:
+	from settings import REQUEST_HEADER, MAX_WORKERS, JINJA_ENV
+	from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+	from urls import SEARCH_DRUG, SEARCH_DRUG_MORE
+	from parsers import parse_search_drug, parse_detail_api, parse_detail
+	from retrieves import retrieve_search_drug
+except:
+	from .settings import REQUEST_HEADER, MAX_WORKERS, JINJA_ENV
+	from .forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+	from .urls import SEARCH_DRUG, SEARCH_DRUG_MORE
+	from .parsers import parse_search_drug, parse_detail_api, parse_detail
+	from .retrieves import retrieve_search_drug
 
 
 

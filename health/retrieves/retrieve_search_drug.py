@@ -1,8 +1,13 @@
 import requests
 
-from urls import SEARCH_DRUG, SEARCH_DRUG_MORE, API_DETAIL_DRUG, DETAIL_DRUG
-from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
-from settings import REQUEST_HEADER
+try:
+	from ..urls import SEARCH_DRUG, SEARCH_DRUG_MORE, API_DETAIL_DRUG, DETAIL_DRUG
+	from ..forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+	from ..settings import REQUEST_HEADER	
+except:
+	from urls import SEARCH_DRUG, SEARCH_DRUG_MORE, API_DETAIL_DRUG, DETAIL_DRUG
+	from forms import DRUG_SEARCH_FORM, DRUG_SEARCH_MORE_FORM
+	from settings import REQUEST_HEADER	
 
 
 
