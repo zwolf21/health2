@@ -48,8 +48,10 @@ def main():
 	if args.output:
 		df = pd.DataFrame(records)
 		df = df.rename(columns=COLUMN_MAP)
-		df = df[list(COLUMN_MAP.values())]
-		df.set_index(INDEX, inplace=True)
+		
+		df = df[[col for col in COLUMN_MAP.values() if col in df.columns]]
+		if set(INDEX) < set(df.columns):
+			df.set_index(INDEX, inplace=True)
 		df.to_excel(args.output, index=True)
 	else:
 		for row in records:

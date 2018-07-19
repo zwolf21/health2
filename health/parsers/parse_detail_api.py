@@ -90,6 +90,13 @@ def _parce_atc_cd(value):
 def _parse_effect(value):
 	if not value:
 		return value
+	soup = BeautifulSoup(value, 'html.parser')
+	
+	if soup.p:
+		soup.p.decompose()
+
+	value = soup.text
+
 	value = value.replace('br', '\n')
 	value = re.sub('\n+', '\n', value)
 	return value
